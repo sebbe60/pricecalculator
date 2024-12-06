@@ -287,8 +287,8 @@
                         "boat-category-d": 25000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "stockholm": {
@@ -298,8 +298,8 @@
                         "boat-category-c": 150000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 10000,
-                        "paygo-package": 30000
+                        "PayGo-membership": 10000,
+                        "PayGo-package": 30000
                     }
                 },
                 "marbella": {
@@ -307,8 +307,8 @@
                         "boat-category-c": 19000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 7000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 7000
                     }
                 },
                 "menorca": {
@@ -316,8 +316,8 @@
                         "boat-category-b": 14995
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1945
-                        // Only PayGo Membership available.
+                        "PayGo-membership": 1945
+                        // Only PayGo Membership available
                     }
                 },
                 "malta": {
@@ -326,8 +326,8 @@
                         "boat-category-c": 21000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 4200
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 4200
                     }
                 },
                 "cancun": {
@@ -335,8 +335,8 @@
                         "boat-category-c": 17000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "ibiza": {
@@ -344,8 +344,8 @@
                         "boat-category-c": null
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "costa-brava": {
@@ -355,8 +355,8 @@
                         "boat-category-c": 20000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "st-tropez": {
@@ -366,8 +366,8 @@
                         "boat-category-c": 21000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "corsica": {
@@ -377,8 +377,8 @@
                         "boat-category-d": 47700
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "la-spezia": {
@@ -388,8 +388,8 @@
                         "boat-category-c": 23000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "jersey": {
@@ -399,8 +399,8 @@
                         "boat-category-c": 20000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "uk": {
@@ -410,7 +410,7 @@
                         "boat-category-c": null
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000
+                        "PayGo-membership": 1000
                         // Only PayGo Membership available
                     }
                 },
@@ -420,8 +420,8 @@
                         "boat-category-b": 9000
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 },
                 "bonaire": {
@@ -430,8 +430,8 @@
                         "boat-category-b": 13500
                     },
                     "on-demand-boating": {
-                        "paygo-membership": 1000,
-                        "paygo-package": 3000
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
                     }
                 }
             };
@@ -458,16 +458,35 @@
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
             }
 
-            function updateOnDemandMessage(packageSelected) {
-                let baseMessage = "Price for PayGo memberships applies to all Boat Categories.";
-                let additionalMessage = "";
-                if (packageSelected === "paygo-membership") {
-                    additionalMessage = " Price for PayGo Membership fee applies to all Boat Categories and includes Onboarding.";
-                } else if (packageSelected === "paygo-package") {
-                    additionalMessage = " Price package for boat trips including Membership fee and Onboarding free of charge.";
+            function getPackageDisplayName(pkg) {
+                // Provide a friendly display name for packages
+                if (pkg === "PayGo-membership") {
+                    return "PayGo Only Membership";
+                } else if (pkg === "PayGo-package") {
+                    return "PayGo Package";
+                } else {
+                    return pkg.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
                 }
-                onDemandMessage.innerHTML = baseMessage + additionalMessage;
-                onDemandMessage.style.display = "block";
+            }
+
+            function updateOnDemandMessage(packageSelected) {
+                onDemandMessage.style.display = "none";
+
+                if (!packageSelected) {
+                    return;
+                }
+
+                let additionalMessage = "";
+                if (packageSelected === "PayGo-membership") {
+                    // Full original text for PayGo Only Membership
+                    additionalMessage = "Price for PayGo Membership fee applies to all Boat Categories and includes Onboarding.";
+                } else if (packageSelected === "PayGo-package") {
+                    // Full text for PayGo Package
+                    additionalMessage = "Price for PayGo memberships applies to all Boat Categories. Price package for boat trips including Membership fee and Onboarding free of charge.";
+                }
+
+                onDemandMessage.innerHTML = additionalMessage;
+                onDemandMessage.style.display = additionalMessage ? "block" : "none";
             }
 
             function updateCategories() {
@@ -485,18 +504,12 @@
                 priceDisplay.style.display = "none";
 
                 if (membership === "on-demand-boating") {
-                    // Hide unlimited message
-                    unlimitedMessage.style.display = "none";
-                    // Show base message
-                    updateOnDemandMessage();
-                    // Show package group if options are available
                     const availablePackages = prices[location]?.[membership];
                     if (availablePackages) {
                         const packages = Object.keys(availablePackages).filter(pkg => availablePackages[pkg] !== undefined);
                         if (packages.length === 1) {
                             // Only one package available
                             packageGroup.style.display = "none";
-                            packageSelect.innerHTML = '';
                             packageSelect.value = packages[0];
                             updateOnDemandMessage(packages[0]);
                             updatePrice();
@@ -505,7 +518,7 @@
                             for (const pkg of packages) {
                                 const option = document.createElement("option");
                                 option.value = pkg;
-                                option.textContent = pkg.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+                                option.textContent = getPackageDisplayName(pkg);
                                 packageSelect.appendChild(option);
                             }
                         }
@@ -539,7 +552,7 @@
                 if (membership === "on-demand-boating") {
                     const packageSelected = packageSelect.value;
                     const availablePackages = prices[location]?.[membership];
-                    if (location && (packageSelected || Object.keys(availablePackages).length === 1)) {
+                    if (location && (packageSelected || (availablePackages && Object.keys(availablePackages).length === 1))) {
                         const selectedPackage = packageSelected || Object.keys(availablePackages)[0];
                         updateOnDemandMessage(selectedPackage);
                         const price = prices[location]?.[membership]?.[selectedPackage];
