@@ -1,1 +1,1 @@
-price calcolautor for agapi
+price calculator in Agapi
