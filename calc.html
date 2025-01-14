@@ -598,17 +598,35 @@
             const submitButton = wrapper.querySelector("#submit-button");
 
             submitButton.addEventListener("click", function () {
-                const name = wrapper.querySelector("#name").value;
-                const email = wrapper.querySelector("#email").value;
-                const message = wrapper.querySelector("#message").value;
-                const location = locationSelect.value;
-                const membership = membershipSelect.value;
-                const category = categorySelect.value || "N/A";
-                const packageSelected = packageSelect.value || "N/A";
-                const price = priceSpan.textContent || "N/A";
-                const currency = currencySpan.textContent || "N/A";
+    const name = document.querySelector("#name").value;
+    const email = document.querySelector("#email").value;
+    const message = document.querySelector("#message").value;
+    const location = document.querySelector("#location").value;
+    const membership = document.querySelector("#membership").value;
+    const category = document.querySelector("#category").value || "N/A";
+    const packageSelected = document.querySelector("#package").value || "N/A";
+    const price = document.querySelector("#price").textContent || "N/A";
+    const currency = document.querySelector("#currency").textContent || "N/A";
 
-                emailjs.send("service_bp6qapf", "template_oymlxox", {
+    // Send data via EmailJS
+    emailjs.send("service_bp6qapf", "template_oymlxox", {
+        name,
+        email,
+        message,
+        location,
+        membership,
+        category,
+        package: packageSelected,
+        price: `${price} ${currency}`
+    }).then(
+        function () {
+            console.log("Email sent successfully via EmailJS!");
+
+            // After sending email, send data to Mailchimp
+            fetch("https://ampliflyr.com/agapi/mailchimp.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
                     name,
                     email,
                     message,
@@ -616,19 +634,33 @@
                     membership,
                     category,
                     package: packageSelected,
-                    price: `${price} ${currency}`
-                }).then(
-                    function () {
-                        // Hide the contact form
-                        contactForm.style.display = 'none';
-                        // Display the confirmation message
-                        confirmation.style.display = 'block';
-                    },
-                    function (error) {
-                        console.error("Failed to send email:", error);
+                    price: `${price} ${currency}`,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        console.log("Successfully added to Mailchimp!");
+                        // Show confirmation message
+                        document.querySelector("#price-calculator-form").style.display = 'none';
+                        document.querySelector("#confirmation").style.display = 'block';
+                    } else {
+                        console.error("Failed to add to Mailchimp:", data.message);
+                        alert("Mailchimp integration failed. Please try again.");
                     }
-                );
-            });
+                })
+                .catch((error) => {
+                    console.error("Error sending data to Mailchimp:", error);
+                    alert("An error occurred while sending data to Mailchimp.");
+                });
+        },
+        function (error) {
+            console.error("EmailJS: Failed to send email:", error);
+            alert("Failed to send your details via email. Please try again.");
+        }
+    );
+});
+
 
             locationSelect.addEventListener('change', updateCategories);
             membershipSelect.addEventListener('change', updateCategories);
