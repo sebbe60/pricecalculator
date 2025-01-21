@@ -602,57 +602,52 @@
             submitButton.addEventListener("click", function () {
     const nameField = wrapper.querySelector("#name");
     const emailField = wrapper.querySelector("#email");
-    const nameError = wrapper.querySelector("#name-error");
-    const emailError = wrapper.querySelector("#email-error");
+    const messageField = wrapper.querySelector("#message");
+    const locationField = wrapper.querySelector("#location");
+    const membershipField = wrapper.querySelector("#membership");
+    const categoryField = wrapper.querySelector("#category");
+    const packageField = wrapper.querySelector("#package");
+    const priceField = priceSpan.textContent;
+    const currencyField = currencySpan.textContent;
 
-    let hasError = false;
-
-    // Validate Name Field
-    if (!nameField.value.trim()) {
-        nameError.textContent = "Required";
-        nameError.style.display = "block";
-        hasError = true;
-    } else {
-        nameError.style.display = "none";
-    }
-
-    // Validate Email Field
-    if (!emailField.value.trim()) {
-        emailError.textContent = "Required";
-        emailError.style.display = "block";
-        hasError = true;
-    } else {
-        emailError.style.display = "none";
-    }
-
-    // Stop submission if there are errors
-    if (hasError) {
+    // Basic validation
+    if (!nameField.value.trim() || !emailField.value.trim()) {
+        // Display errors (optional inline error handling can be added here)
         return;
     }
 
-    // Proceed with sending the form
-    const message = wrapper.querySelector("#message").value;
-    const location = locationSelect.value;
-    const membership = membershipSelect.value;
-    const category = categorySelect.value || "N/A";
-    const packageSelected = packageSelect.value || "N/A";
-    const price = priceSpan.textContent || "N/A";
-    const currency = currencySpan.textContent || "N/A";
-
-    emailjs.send("service_bp6qapf", "template_oymlxox", {
+    // Data to send
+    const formData = {
         name: nameField.value.trim(),
         email: emailField.value.trim(),
-        message,
-        location,
-        membership,
-        category,
-        package: packageSelected,
-        price: `${price} ${currency}`
-    }).then(
+        message: messageField ? messageField.value.trim() : "",
+        location: locationField.value,
+        membership: membershipField.value,
+        category: categoryField ? categoryField.value : "",
+        package: packageField ? packageField.value : "",
+        price: priceField ? priceField : "",
+        currency: currencyField ? currencyField : "",
+    };
+
+    // Send to Make.com webhook
+    fetch("https://hook.eu2.make.com/w23ch4kp9sgom7r6dv38jild6sqkfedz", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    }).then(response => {
+        if (response.ok) {
+            console.log("Form data sent to Make.com successfully.");
+        } else {
+            console.error("Failed to send form data to Make.com.");
+        }
+    }).catch(error => console.error("Error sending data to Make.com:", error));
+
+    // Continue with EmailJS logic
+    emailjs.send("service_bp6qapf", "template_oymlxox", formData).then(
         function () {
-            // Hide the contact form
             contactForm.style.display = 'none';
-            // Display the confirmation message
             confirmation.style.display = 'block';
         },
         function (error) {
@@ -660,6 +655,7 @@
         }
     );
 });
+
 
 
             locationSelect.addEventListener('change', updateCategories);
