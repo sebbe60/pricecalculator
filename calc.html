@@ -598,37 +598,44 @@
             const submitButton = wrapper.querySelector("#submit-button");
 
             submitButton.addEventListener("click", function () {
-                const name = wrapper.querySelector("#name").value;
-                const email = wrapper.querySelector("#email").value;
-                const message = wrapper.querySelector("#message").value;
-                const location = locationSelect.value;
-                const membership = membershipSelect.value;
-                const category = categorySelect.value || "N/A";
-                const packageSelected = packageSelect.value || "N/A";
-                const price = priceSpan.textContent || "N/A";
-                const currency = currencySpan.textContent || "N/A";
+    const name = wrapper.querySelector("#name").value.trim();
+    const email = wrapper.querySelector("#email").value.trim();
 
-                emailjs.send("service_bp6qapf", "template_oymlxox", {
-                    name,
-                    email,
-                    message,
-                    location,
-                    membership,
-                    category,
-                    package: packageSelected,
-                    price: `${price} ${currency}`
-                }).then(
-                    function () {
-                        // Hide the contact form
-                        contactForm.style.display = 'none';
-                        // Display the confirmation message
-                        confirmation.style.display = 'block';
-                    },
-                    function (error) {
-                        console.error("Failed to send email:", error);
-                    }
-                );
-            });
+    if (!name || !email) {
+        alert("Please fill in all required fields (Name and Email).");
+        return; // Stop submission if fields are empty
+    }
+
+    const message = wrapper.querySelector("#message").value;
+    const location = locationSelect.value;
+    const membership = membershipSelect.value;
+    const category = categorySelect.value || "N/A";
+    const packageSelected = packageSelect.value || "N/A";
+    const price = priceSpan.textContent || "N/A";
+    const currency = currencySpan.textContent || "N/A";
+
+    emailjs.send("service_bp6qapf", "template_oymlxox", {
+        name,
+        email,
+        message,
+        location,
+        membership,
+        category,
+        package: packageSelected,
+        price: `${price} ${currency}`
+    }).then(
+        function () {
+            // Hide the contact form
+            contactForm.style.display = 'none';
+            // Display the confirmation message
+            confirmation.style.display = 'block';
+        },
+        function (error) {
+            console.error("Failed to send email:", error);
+        }
+    );
+});
+
 
             locationSelect.addEventListener('change', updateCategories);
             membershipSelect.addEventListener('change', updateCategories);
