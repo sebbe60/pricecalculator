@@ -235,11 +235,13 @@
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required>
+                     <span id="name-error" style="color: red; font-size: 0.85rem; display: none;">Required</span>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required>
+                     <span id="email-error" style="color: red; font-size: 0.85rem; display: none;">Required</span>
                 </div>
 
                 <div class="form-group">
@@ -598,14 +600,37 @@
             const submitButton = wrapper.querySelector("#submit-button");
 
             submitButton.addEventListener("click", function () {
-    const name = wrapper.querySelector("#name").value.trim();
-    const email = wrapper.querySelector("#email").value.trim();
+    const nameField = wrapper.querySelector("#name");
+    const emailField = wrapper.querySelector("#email");
+    const nameError = wrapper.querySelector("#name-error");
+    const emailError = wrapper.querySelector("#email-error");
 
-    if (!name || !email) {
-        alert("Please fill in all required fields (Name and Email).");
-        return; // Stop submission if fields are empty
+    let hasError = false;
+
+    // Validate Name Field
+    if (!nameField.value.trim()) {
+        nameError.textContent = "Required";
+        nameError.style.display = "block";
+        hasError = true;
+    } else {
+        nameError.style.display = "none";
     }
 
+    // Validate Email Field
+    if (!emailField.value.trim()) {
+        emailError.textContent = "Required";
+        emailError.style.display = "block";
+        hasError = true;
+    } else {
+        emailError.style.display = "none";
+    }
+
+    // Stop submission if there are errors
+    if (hasError) {
+        return;
+    }
+
+    // Proceed with sending the form
     const message = wrapper.querySelector("#message").value;
     const location = locationSelect.value;
     const membership = membershipSelect.value;
@@ -615,8 +640,8 @@
     const currency = currencySpan.textContent || "N/A";
 
     emailjs.send("service_bp6qapf", "template_oymlxox", {
-        name,
-        email,
+        name: nameField.value.trim(),
+        email: emailField.value.trim(),
         message,
         location,
         membership,
