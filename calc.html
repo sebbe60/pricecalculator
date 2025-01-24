@@ -232,7 +232,7 @@
                 <h3 id="specific-h3">Looking for your dream boating life? Get in touch!</h3>
 
                 <!-- Hidden Field for Lead Source -->
-<input type="hidden" id="lead-source" name="lead-source" value="Configurator">
+<input type="hidden" id="lead-source" name="lead_source" value="Configurator">
 
 
                 <br>
@@ -283,6 +283,7 @@
             const unlimitedMessage = wrapper.querySelector('#unlimited-message');
             const confirmation = wrapper.querySelector("#confirmation");
             const contactForm = wrapper.querySelector('#contact-form');
+            const leadSourceField = wrapper.querySelector('#lead-source');
 
             const prices = {
                 "palma-de-mallorca": {
@@ -613,6 +614,7 @@
     const packageField = wrapper.querySelector("#package");
     const priceField = priceSpan.textContent;
     const currencyField = currencySpan.textContent;
+    const leadSourceField = wrapper.querySelector("#lead-source");
 
     // Basic validation
     if (!nameField.value.trim() || !emailField.value.trim()) {
@@ -631,6 +633,7 @@
         package: packageField ? packageField.value : "",
         price: priceField ? priceField : "",
         currency: currencyField ? currencyField : "",
+        lead_source: leadSourceField.value
     };
 
     // Send to Make.com webhook
